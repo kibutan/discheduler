@@ -73,6 +73,11 @@ try {
       message.reply("Pong");
     }
     if (message.content === "schedule") {
+      let postBody;
+      MakePostBody().then((body) => {
+        console.log("postBody in ", body);
+        postBody = body;
+      });
       const sendmessage = await client.channels.cache
         .get(process.env.CHANNEL_ID)
         .send(
@@ -125,14 +130,13 @@ try {
     return body;
   }
 
-  let postBody;
-  MakePostBody().then((body) => {
-    console.log("postBody in ", body);
-    postBody = body;
-  });
-
   // 毎月20日12時0分に実行する
   cron.schedule("0 12 20 * *", async () => {
+    let postBody;
+    MakePostBody().then((body) => {
+      console.log("postBody in ", body);
+      postBody = body;
+    });
     // const holidaysLength = Holidays.length;
     // console.log(postBody);
     const sendMessage = await client.channels.cache
